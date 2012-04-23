@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} - {{ object.title }}{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+  function initialize() {
+  	var myOptions = {
+      zoom: 16,
+      center: new google.maps.LatLng({{ object.latitude|floatformat:"-14" }},{{ object.longitude|floatformat:"-14" }}),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng({{ object.latitude|floatformat:"-14" }},{{ object.longitude|floatformat:"-14" }}), 
+        map: map,
+        title:"{{ object.title }}"
+    });
+    
+ }
+</script> 
+{% endblock %}
+
+{% block body %}
+onload="initialize()"
+{% endblock %}
+
+{% block content %}
+<div style="margin: 0 0 20px 0">
+<h2>{{ object.title }}</h2>
+Von: {{ object.author }} am {{ object.date_created }} eingestellt
+</div>
+<div class="row">
+<div class="span6">
+<h3>Daten</h3>
+<div style="margin: 20px 0 0 0">
+{% if object.image %}
+<ul class="thumbnails">
+  <li class="span3">
+    <a href="{{ MEDIA_URL }}{{ object.image }}" class="thumbnail">
+    	<img src="{{ MEDIA_URL }}{{ object.thumb }}" alt="{{ object.title }}" border="0" width="200px">
+    </a> 
+  </li>
+</ul>
+{% endif %}
+<p><strong>Beschreibung: </strong>{{ object.description }}</p>
+<p><strong>Wegbeschreibung: </strong>{{ object.route }}</p>
+<p><strong>Landschaft: </strong>{{ object.landscape }}</p>
+<p><strong>Schwimmen: </strong>{{ object.swimming }}</p>
+<p><strong>Grillen: </strong>{{ object.bbq }}</p>
+<p><strong>Privatssph&auml;re: </strong>{{ object.privacy }}</p>
+</div>
+</div>
+<div class="span6">
+<h3>Karte</h3>
+<div id="map_canvas" style="width: 90%; height: 500px; margin-top:10px"></div>
+</div>
+</div>
+<div class="row">
+<div class="span6">
+<h3>Dein Kommentar:</h3>
+<form action="{% url places.views.add_comment object.slug %}" method="POST">{% csrf_token %}
+    <div id="cform">
+        Name:
+        <p>{{ form.author }}</p>
+        <p>Kommentar:</p>
+        <p>{{ form.body|linebreaks }}</p>
+    </div>
+    <div id="submit"><input type="submit" value="Submit"></div>
+</form>
+</div>
+<div class="span6">
+<h3>Kommentare</h3>
+{% for comment in comments %}
+    <div>
+        <div>{{ comment.created }} | {{ comment.author }}</div>
+        <div><p>{{ comment.body|linebreaks }}<p/></div>
+    </div>
+{% endfor %}
+{% if not comments %}
+<p>Noch keine Kommentare</p>
+{% endif %}
+</div>
+</div>
+{% endblock %}

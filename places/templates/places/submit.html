@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} - Ort hinzuf&uuml;gen{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+  function initialize() {
+    var myOptions = {
+      zoom: 6,
+      center: new google.maps.LatLng(51.163387,10.452611),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+       
+
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(51.163387,10.452611),
+        map: map,
+        draggable: true,
+        title:"Drag me"
+    });
+    
+    google.maps.event.addListener(marker, 'dragend', function(event) {
+       var point = marker.getPosition();
+       form = document.forms['submitform'];
+       form.elements['id_latitude'].value = point.lat();
+       form.elements['id_longitude'].value = point.lng();
+	});
+  }
+</script>
+{% endblock %}
+
+{% block body %}
+onload="initialize()"
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header">
+  <h1>Ort hinzuf&uuml;gen</h1>
+</div>
+<div class="row">
+<div class="span12">
+<p>Um ein lauschiges Pl&auml;tzchen zur Datenbank hinzuzu&uuml;gen schiebe den Marker auf der Karte auf den Ort (Du kannst zoomen, schieben usw.) Wenn du das getan hast f&uuml;lle die Daten im Formular aus und lade, wenn du magst, noch ein Bild von deinem Ort hoch. Wenn alles geklappt hast landest du wieder auf der Startseite und dein Ort ist in der Datenbank gespeichert. Bei Problemen wende dich an mich</p>
+</div>
+</div>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<div class="row">
+<div class="span6">
+<form enctype="multipart/form-data" action="/submit/" method="post" id="submitform">
+{% csrf_token %}
+<table style="width:100%">
+{{ contact_form.as_table }}
+</table>
+<input type="submit" value="Submit" class="pull-right"/>
+</form>
+</div>
+<div class="span6">
+<div id="map_canvas" style="width: 100%; height: 600px;></div>
+</div>
+</div>
+{% endblock %}

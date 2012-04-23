@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}{{ block.super }} - Alle Orte{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+  function initialize() {
+    var myOptions = {
+      zoom: 6,
+      center: new google.maps.LatLng(51.163387,10.452611),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    
+    {% for place in object_list %}
+    
+    var contentString{{ forloop.counter }} = '<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h2 id="firstHeading" class="firstHeading">{{ place.title }}</h2>'+
+    '<div id="bodyContent" style="max-width:200px">'+
+    '<p><strong>Tipp von: </strong>{{ place.author }}</p>'+
+    '<p><strong>Beschreibung: </strong>{{ place.description }}</p>'+
+    '<p><strong>Wegbeschreibung: </strong>{{ place.route }}</p>'+
+    '<p><strong>Landschaft: </strong>{{ place.get_landscape_display }}</p>'+
+    '<p><strong>Grillen: </strong>{{ place.get_bbq_display }}</p>'+
+    '<p><strong>Schwimmen: </strong>{{ place.get_swimming_display }}</p>'+
+    '<p><strong>Privatssph&aumlre: </strong>{{ place.get_privacy_display }}</p>'+
+    '<p><a href="/orte/{{ place.slug }}/">Mehr, Bilder, Kommentare</a>'+
+    '</div>'+
+    '</div>';
+
+	var infowindow{{ forloop.counter }} = new google.maps.InfoWindow({
+    	content: contentString{{ forloop.counter }}
+	});
+
+    var marker{{ forloop.counter }} = new google.maps.Marker({
+        position: new google.maps.LatLng({{ place.latitude|floatformat:"-14" }},{{ place.longitude|floatformat:"-14" }}), 
+        map: map,
+        title:"{{ place.title }}"
+    });
+    
+    google.maps.event.addListener(marker{{ forloop.counter }}, 'click', function() {
+ 	 infowindow{{ forloop.counter }}.open(map,marker{{ forloop.counter }});
+	});
+    {% endfor %}
+  }
+</script>
+{% endblock %}
+
+{% block body %}
+onload="initialize()"
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Lauschige Pl&auml;tzchen<small>Die Picknick Datenbank</small></h1>
+</div>
+<div class="row">
+<div class="span4"><img src="{{ STATIC_URL }}box.png" style="float:left; margin: 7px 10px 0 0;"><p>Lauschige Pl&auml;tzchen soll die Datenbank f&uuml;r lauschige Orte in ganz Deutschland werden. Egal ob f&uuml;r ein Picknik zu zweit, schwimmen zu viert oder ein Grillausflug mit Freunden. Das geht aber nur wenn ihr mitmacht! Geht auf die "Ort hinzuf&uuml;gen" Seite und teilt euren Lieblingsort mit der Welt.</p></div>
+<div class="span4"><img src="{{ STATIC_URL }}chat.png" style="float:left; margin: 7px 10px 0 0;"><p>Bei lauschige Pl&auml;tzchen kannst du deine Orte einstellen und andere Kommentieren, wenn du mehr Ideen hast schreib <a href="http://twitter.com/plaetzchen">@plaetzchen</a>: pbrechler@mac.com</p></div>
+<div class="span4"><img src="{{ STATIC_URL }}pin.png" style="float:left; margin: 7px 10px 0 0;"><p>Um neue Orte hinzuzuf&uuml;gen klick im Men&uuml; auf "Ort hinzuf&uuml;gen", bewege den Marker auf den richtigen Ort und f&uuml;ll die Daten aus, wenn du willst kannst du auch noch einen Ort hinzuf&uuml;gen</p></div>
+</div>
+
+<div class="row">
+<div id="map_canvas" style="width: 100%; height: 600px; margin-top:10px" class="span12"></div>
+</div>
+{% endblock %}
