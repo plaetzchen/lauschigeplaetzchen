@@ -5,13 +5,16 @@
 {% block script %}
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
-  function initialize() {
+ var map;
+ var geocoder; 
+ function initialize() {
+    geocoder = new google.maps.Geocoder();
     var myOptions = {
       zoom: 6,
       center: new google.maps.LatLng(51.163387,10.452611),
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     
     var infowindow = new google.maps.InfoWindow({
 	});
@@ -47,6 +50,17 @@
 	});
     {% endfor %}
   }
+function codeAddress() {
+    var address = document.getElementById("address").value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+        map.setZoom(12);
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+}
 </script>
 {% endblock %}
 
@@ -63,7 +77,16 @@ onload="initialize()"
 <div class="span4"><img src="{{ STATIC_URL }}chat.png" style="float:left; margin: 7px 10px 0 0;"><p>Bei lauschige Pl&auml;tzchen kannst du deine Orte einstellen und andere Kommentieren, wenn du mehr Ideen hast schreib <a href="http://twitter.com/plaetzchen">@plaetzchen</a>: pbrechler@mac.com</p></div>
 <div class="span4"><img src="{{ STATIC_URL }}pin.png" style="float:left; margin: 7px 10px 0 0;"><p>Um neue Orte hinzuzuf&uuml;gen klick im Men&uuml; auf "Ort hinzuf&uuml;gen", bewege den Marker auf den richtigen Ort und f&uuml;ll die Daten aus, wenn du willst kannst du auch noch einen Ort hinzuf&uuml;gen</p></div>
 </div>
-
+<div class="row>
+<div class="span12">
+<div style="width:90%">
+<div class="pull-right">
+    <input id="address" type="textbox" value="">
+    <input type="button" value="Suche" onclick="codeAddress()">
+</div>
+</div>
+</div>
+</div>
 <div class="row">
 <div class="span12">
 <div id="map_canvas" style="width: 90%; height: 500px; margin-top:10px; margin-left:auto; margin-right:auto"></div>
