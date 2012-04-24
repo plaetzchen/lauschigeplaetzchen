@@ -45,12 +45,12 @@ Von: {{ object.author }} am {{ object.date_created }} eingestellt
   </li>
 </ul>
 {% endif %}
-<p><strong>Beschreibung: </strong>{{ object.description }}</p>
-<p><strong>Wegbeschreibung: </strong>{{ object.route }}</p>
-<p><strong>Landschaft: </strong>{{ object.landscape }}</p>
-<p><strong>Schwimmen: </strong>{{ object.swimming }}</p>
-<p><strong>Grillen: </strong>{{ object.bbq }}</p>
-<p><strong>Privatssph&auml;re: </strong>{{ object.privacy }}</p>
+<p><strong>Beschreibung: </strong>{{ object.description|linebreaksbr }}</p>
+<p><strong>Wegbeschreibung: </strong>{{ object.route|linebreaksbr }}</p>
+<p><strong>Landschaft: </strong>{{ object.get_landscape_display }}</p>
+<p><strong>Schwimmen: </strong>{{ object.get_swimming_display }}</p>
+<p><strong>Grillen: </strong>{{ object.get_bbq_display }}</p>
+<p><strong>Privatssph&auml;re: </strong>{{ object.get_privacy_display }}</p>
 </div>
 </div>
 <div class="span6">

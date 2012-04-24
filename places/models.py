@@ -1,10 +1,12 @@
 import datetime
 
 from django.db import models
+from autoslug import AutoSlugField
 
 class Place(models.Model):
     
     RATINGS = (
+	('0', u'nicht vorhanden'),
         ('1', u'schlecht'),
         ('2', u'eher schlecht'),
         ('3', u'in Ordnung'),
@@ -13,15 +15,15 @@ class Place(models.Model):
     )
     
     title = models.CharField(u'Name', max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = AutoSlugField(populate_from='title',editable=False)
     description = models.TextField(u'Beschreibung')
     route = models.TextField(u'Wegbeschreibung')
     latitude = models.FloatField(u'Latitude')
     longitude = models.FloatField(u'Longitude')
-    landscape = models.CharField(u'Landschaft', max_length=1, choices=RATINGS)
-    bbq = models.CharField(u'Grillen', max_length=1, choices=RATINGS)
-    swimming = models.CharField(u'Schwimmen', max_length=1, choices=RATINGS)
-    privacy = models.CharField(u'Privatsspaehre', max_length=1, choices=RATINGS)
+    landscape = models.CharField(u'Landschaft', max_length=1, choices=RATINGS, null=True)
+    bbq = models.CharField(u'Grillen', max_length=1, choices=RATINGS, null=True)
+    swimming = models.CharField(u'Schwimmen', max_length=1, choices=RATINGS, null=True)
+    privacy = models.CharField(u'Privatsspaehre', max_length=1, choices=RATINGS, null=True)
     author = models.CharField(u'Autor', max_length=255)
     image = models.ImageField(u'Bild', upload_to="images/", blank=True, null=True)
     thumb = models.ImageField(u'Bild', upload_to="images/", blank=True, null=True)

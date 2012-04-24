@@ -21,8 +21,8 @@
     '<h2 id="firstHeading" class="firstHeading">{{ place.title }}</h2>'+
     '<div id="bodyContent" style="max-width:200px">'+
     '<p><strong>Tipp von: </strong>{{ place.author }}</p>'+
-    '<p><strong>Beschreibung: </strong>{{ place.description }}</p>'+
-    '<p><strong>Wegbeschreibung: </strong>{{ place.route }}</p>'+
+    '<p><strong>Beschreibung: </strong>{{ place.description|linebreaksbr }}</p>'+
+    '<p><strong>Wegbeschreibung: </strong>{{ place.route|linebreaksbr }}</p>'+
     '<p><strong>Landschaft: </strong>{{ place.get_landscape_display }}</p>'+
     '<p><strong>Grillen: </strong>{{ place.get_bbq_display }}</p>'+
     '<p><strong>Schwimmen: </strong>{{ place.get_swimming_display }}</p>'+

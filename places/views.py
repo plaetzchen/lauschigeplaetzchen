@@ -14,6 +14,12 @@ from places.forms import PlaceForm,CommentForm
 from os.path import join as pjoin
 import string, random, os
 
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 try:
     from PIL import Image, ImageOps
 except ImportError:
@@ -58,19 +64,16 @@ def submit(request):
         form = PlaceForm(request.POST, request.FILES or None)
         if form.is_valid():
                 cmodel = form.save()
-                #This is where you might chooose to do stuff.
-                slug = slugify(cmodel.title)
-                newslug = slug + '-' + str(random.randint(1, 1000))   
-                cmodel.slug = newslug
+                if cmodel.image:
+                    fn, ext = os.path.splitext(cmodel.image.name)
+                    im = Image.open(cmodel.image)
+            	    if im.mode not in ("L", "RGB"):
+                	    im = image.convert("RGB")
+                    im.thumbnail((300,300), Image.ANTIALIAS)
+                    th_fl = fn + '_thumb' + ext
+                    im.save(settings.MEDIA_ROOT + '/' + th_fl, "JPEG")
+                    cmodel.thumb =  th_fl
                 
-                fn, ext = os.path.splitext(cmodel.image.name)
-                im = Image.open(cmodel.image)
-            	if im.mode not in ("L", "RGB"):
-                	im = image.convert("RGB")
-                im.thumbnail((300,300), Image.ANTIALIAS)
-                th_fl = fn + '_thumb' + ext
-                im.save(settings.MEDIA_ROOT + '/' + th_fl, "JPEG")
-                cmodel.thumb =  th_fl
                 cmodel.save()
 
                 return redirect(index)

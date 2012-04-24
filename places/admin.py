@@ -5,7 +5,7 @@ from places.models import Comment
 
 
 class PlaceAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ['title']}
+    display_fields = ["title","description","route"]
 
 class CommentAdmin(admin.ModelAdmin):
     display_fields = ["place", "author", "created"]
