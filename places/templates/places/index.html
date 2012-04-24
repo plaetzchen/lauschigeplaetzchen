@@ -13,6 +13,9 @@
     }
     var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     
+    var infowindow = new google.maps.InfoWindow({
+	});
+
     {% for place in object_list %}
     
     var contentString{{ forloop.counter }} = '<div id="content">'+
@@ -31,18 +34,16 @@
     '</div>'+
     '</div>';
 
-	var infowindow{{ forloop.counter }} = new google.maps.InfoWindow({
-    	content: contentString{{ forloop.counter }}
-	});
-
     var marker{{ forloop.counter }} = new google.maps.Marker({
         position: new google.maps.LatLng({{ place.latitude|floatformat:"-14" }},{{ place.longitude|floatformat:"-14" }}), 
         map: map,
         title:"{{ place.title }}"
     });
     
-    google.maps.event.addListener(marker{{ forloop.counter }}, 'click', function() {
- 	 infowindow{{ forloop.counter }}.open(map,marker{{ forloop.counter }});
+    google.maps.event.addListener(marker{{ forloop.counter }}, 'click', function(){
+     infowindow.close();
+     infowindow.content = contentString{{ forloop.counter }}
+ 	 infowindow.open(map,marker{{ forloop.counter }});
 	});
     {% endfor %}
   }
