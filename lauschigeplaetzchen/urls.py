@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     (r'^submit/', 'places.views.submit'),
     (r'^about/', 'places.views.about'),
     (r"^orte/add_comment/(?P<slug>[-\w]+)/$", "places.views.add_comment"),
+    (r'^json/', 'places.views.json'),
 )
 
 if settings.DEBUG:

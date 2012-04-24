@@ -14,6 +14,8 @@ from places.forms import PlaceForm,CommentForm
 from os.path import join as pjoin
 import string, random, os
 
+from django.core import serializers
+
 # import the logging library
 import logging
 
@@ -90,3 +92,8 @@ def submit(request):
 def about(request):
 	return render_to_response('places/about.html',
                             context_instance=RequestContext(request))
+
+def json(request):
+	all_objects = list(Place.objects.all()) + list(Comment.objects.all())
+	data = serializers.serialize('json', all_objects)
+	return HttpResponse(data, content_type = 'application/javascript; charset=utf8')
