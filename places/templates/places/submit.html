@@ -27,6 +27,14 @@
        form.elements['id_latitude'].value = point.lat();
        form.elements['id_longitude'].value = point.lng();
 	});
+
+    google.maps.event.addListener(map, 'click', function(event) {
+            marker.setPosition(event.latLng);
+	    var point = marker.getPosition();
+       	    form = document.forms['submitform'];
+            form.elements['id_latitude'].value = point.lat();
+            form.elements['id_longitude'].value = point.lng();
+        });
   }
 </script>
 {% endblock %}
