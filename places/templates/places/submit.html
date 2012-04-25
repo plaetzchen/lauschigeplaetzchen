@@ -64,27 +64,26 @@ onload="initialize()"
   <h1>Ort hinzuf&uuml;gen</h1>
 </div>
 <div class="row">
-<div class="span12">
-<p>Um ein lauschiges Pl&auml;tzchen zur Datenbank hinzuzu&uuml;gen schiebe den Marker auf der Karte auf den Ort (Du kannst zoomen, schieben usw.) Wenn du das getan hast f&uuml;lle die Daten im Formular aus und lade, wenn du magst, noch ein Bild von deinem Ort hoch. Wenn alles geklappt hast landest du wieder auf der Startseite und dein Ort ist in der Datenbank gespeichert. Bei Problemen wende dich an mich</p>
+	<div class="span12">
+		<p>Um ein lauschiges Pl&auml;tzchen zur Datenbank hinzuzu&uuml;gen schiebe den Marker auf der Karte auf den Ort (Du kannst zoomen, schieben usw.) Wenn du das getan hast f&uuml;lle die Daten im Formular aus und lade, wenn du magst, noch ein Bild von deinem Ort hoch. Wenn alles geklappt hast landest du wieder auf der Startseite und dein Ort ist in der Datenbank gespeichert. Bei Problemen wende dich an mich</p>
+	</div>
 </div>
-</div>
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 <div class="row">
-<div class="span6">
-<form enctype="multipart/form-data" action="/submit/" method="post" id="submitform">
-{% csrf_token %}
-<table style="width:100%">
-{{ contact_form.as_table }}
-</table>
-<input type="submit" value="Submit" class="pull-right"/>
-</form>
-</div>
-<div class="span6">
-<div class="pull-right">
-    <input id="address" type="textbox" value="">
-    <input type="button" value="Suche" onclick="codeAddress()">
-</div>
-<div id="map_canvas" style="width: 100%; height: 600px;></div>
-</div>
+	<div class="span6">
+		<form enctype="multipart/form-data" action="/submit/" method="post" id="submitform">
+		{% csrf_token %}
+		<table style="width:100%">
+		{{ contact_form.as_table }}
+		</table>
+		<input type="submit" value="Submit" class="pull-right"/>
+		</form>
+	</div>
+	<div class="span6">
+		<div id="map_canvas" style="width: 100%; height: 600px;"></div>
+		<div class="pull-right">
+                        <input id="address" type="textbox" value="">
+                        <input type="button" value="Suche" onclick="codeAddress()">
+                </div>
+	</div>
 </div>
 {% endblock %}
