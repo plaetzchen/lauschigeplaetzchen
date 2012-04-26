@@ -46,9 +46,9 @@ class Place(models.Model):
         
 class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    author = models.CharField(max_length=60)
-    body = models.TextField()
+    author = models.CharField(u'Autor',max_length=60)
+    body = models.TextField(u'Text')
     place = models.ForeignKey(Place)
 
     def __unicode__(self):
-        return unicode("%s: %s" % (self.place, self.body[:60]))
+        return self.place.title
